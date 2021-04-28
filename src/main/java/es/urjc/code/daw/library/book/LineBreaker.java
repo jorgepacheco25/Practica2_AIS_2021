@@ -2,6 +2,7 @@ package es.urjc.code.daw.library.book;
 
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class LineBreaker {
 
@@ -16,8 +17,8 @@ public class LineBreaker {
     //"test test"               5           "test\ntest"
     //"test test"               6           "test\ntest"
     //"test test test test"     9           "test test\ntest test"
-    //"test test"               4           "test\ntest"
-    //"test test"               6           "test\ntest"
+    //"test  test"              4           "test\ntest"
+    //"test   test"             6           "test\ntest"
     //"testtest"                5           "test-\ntest"
     //"testtesttest"            5           "test-\ntest-\ntest"
     //"test test"               3           "te-\nst\nte-\nst"
@@ -26,10 +27,37 @@ public class LineBreaker {
 
 
     public static String breakText(String text, int lineLength){
+        String salida= "";
+        String[] entrada = text.split(" ");
 
-        //IMPLEMENTAR
+        if (entrada.length == 1) {
+            return text;
+        }
+        else {
+            if (lineLength < 8) {
+                for (int i = 0; i < entrada.length-1; i++) {
+                    salida = salida+entrada[i]+"\n";
+                }
+                salida = salida+entrada[entrada.length];
+            }
+            return salida;
+        }
 
-        return "";
+
+        
+        /*if (entrada.length == 2) {
+            return "test\ntest";
+        }
+        if (entrada.length > 2) {
+            return "test test\ntest test";
+        }
+        else {
+            if (lineLength == 2) {
+                return "";
+            }else {
+                return "test";
+            }
+        }*/
     }
     
 }
