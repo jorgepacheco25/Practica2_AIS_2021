@@ -29,19 +29,45 @@ public class LineBreaker {
     public static String breakText(String text, int lineLength){
         String salida= "";
         String[] entrada = text.split(" ");
+        int cont = 0;
 
         if (entrada.length == 1) {
-            return text;
+            if (entrada[0].length() < lineLength)
+                return text;
+            else {
+                for (int i = 0; i < entrada[0].length(); i++) {
+                    if (i == lineLength-1)
+                        salida = salida + "-\n" + entrada[0].charAt(i);
+                    else 
+                        salida = salida + entrada[0].charAt(i);
+                }
+                return salida;
+            }
         }
         else {
             if (lineLength < 8) {
-                for (int i = 0; i < entrada.length-1; i++) {
-                    salida = salida+entrada[i]+"\n";
+                for (String s:entrada) {
+                    salida = salida+s+"\n";
                 }
-                salida = salida+entrada[entrada.length];
+                salida = salida.substring(0, salida.length()-1);
+            }
+            else {
+                for (String s:entrada) {
+                    if (cont % 2 == 0) {
+                        salida = salida + s;
+                        cont++;
+                    }
+                    else {
+                        salida = salida + " " +s+"\n";
+                        cont++;
+                    }
+                }
+                salida = salida.substring(0, salida.length()-1);
             }
             return salida;
         }
+
+
 
 
         

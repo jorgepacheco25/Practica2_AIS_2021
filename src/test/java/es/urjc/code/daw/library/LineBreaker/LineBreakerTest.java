@@ -76,5 +76,35 @@ public class LineBreakerTest {
         //Then
         assertThat(resultado).isEqualTo("test test\ntest test");
     }
+
+    @Test
+    void test8() {
+
+        //When
+        String resultado = LineBreaker.breakText("test  test", 4);
+
+        //Then
+        assertThat(resultado).isEqualTo("test\ntest");
+    }
+
+    @Test
+    void test9() {
+
+        //When
+        String resultado = LineBreaker.breakText("test   test", 6);
+
+        //Then
+        assertThat(resultado).isEqualTo("test\ntest");
+    }
+
+    @Test
+    void test10() {
+
+        //When
+        String resultado = LineBreaker.breakText("testtest", 5);
+
+        //Then
+        assertThat(resultado).isEqualTo("test-\ntest");
+    }
     
 }
