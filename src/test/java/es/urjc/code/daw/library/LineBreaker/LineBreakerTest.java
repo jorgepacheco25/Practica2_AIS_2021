@@ -87,7 +87,7 @@ public class LineBreakerTest {
         assertThat(resultado).isEqualTo("test\ntest");
     }
 
-    @Test
+   @Test
     void test9() {
 
         //When
@@ -106,5 +106,44 @@ public class LineBreakerTest {
         //Then
         assertThat(resultado).isEqualTo("test-\ntest");
     }
+
+    @Test
+    void test11() {
+
+        //When
+        String resultado = LineBreaker.breakText("testtesttest", 5);
+
+        //Then
+        assertThat(resultado).isEqualTo("test-\ntest-\ntest");
+    }
+
+    @Test
+    void test12() {
+
+        //When
+        String resultado = LineBreaker.breakText("test test", 3);
+
+        //Then
+        assertThat(resultado).isEqualTo("te-\nst\nte-\nst");
+    }
+
+    @Test
+    void test13() {
+
+        //When
+        String resultado = LineBreaker.breakText("test 1234567 test", 6);
+
+        //Then
+        assertThat(resultado).isEqualTo("test\n12345-\n67\ntest");
+    }
     
+    @Test
+    void test14() {
+
+        //When
+        String resultado = LineBreaker.breakText("123456789", 3);
+
+        //Then
+        assertThat(resultado).isEqualTo("12-\n34-\n56-\n789");
+    }
 }

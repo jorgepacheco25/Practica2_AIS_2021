@@ -1,5 +1,6 @@
 package es.urjc.code.daw.library.book;
 
+
 import org.springframework.stereotype.Service;
 
 
@@ -8,82 +9,79 @@ public class LineBreaker {
 
     //CASOS
 
-    //TEXTO                 LineLength      SALIDA
+    //#    //TEXTO                 LineLength      SALIDA
 
-    //""                        2           ""
-    //"test"                    4           "test"
-    //"test"                    5           "test"
-    //"test test"               4           "test\ntest"
-    //"test test"               5           "test\ntest"
-    //"test test"               6           "test\ntest"
-    //"test test test test"     9           "test test\ntest test"
-    //"test  test"              4           "test\ntest"
-    //"test   test"             6           "test\ntest"
-    //"testtest"                5           "test-\ntest"
-    //"testtesttest"            5           "test-\ntest-\ntest"
-    //"test test"               3           "te-\nst\nte-\nst"
-    //"test 1234567 test"       6           "test\n12345-\n67\ntest"
-    //"123456789"               3           "12-\n34-\n56-\n789"
+    //1    //""                        2           ""
+    //2    //"test"                    4           "test"
+    //3    //"test"                    5           "test"
+    //4    //"test test"               4           "test\ntest"
+    //5    //"test test"               5           "test\ntest"
+    //6    //"test test"               6           "test\ntest"
+    //7    //"test test test test"     9           "test test\ntest test"
+    //8    //"test  test"              4           "test\ntest"
+    //9    //"test   test"             6           "test\ntest"
+    //10   //"testtest"                5           "test-\ntest"
+    //11   //"testtesttest"            5           "test-\ntest-\ntest"
+    //12   //"test test"               3           "te-\nst\nte-\nst"
+    //13   //"test 1234567 test"       6           "test\n12345-\n67\ntest"
+    //14   //"123456789"               3           "12-\n34-\n56-\n789"
 
 
-    public static String breakText(String text, int lineLength){
+    public static String breakText(String text, int lineLength){  
         String salida= "";
-        String[] entrada = text.split(" ");
-        int cont = 0;
+        String[] entrada = text.split(" +");
+        int contadorPalabrasEscritas = 0;
+        int contadorLetrasEscritas = 0;
 
-        if (entrada.length == 1) {
-            if (entrada[0].length() < lineLength)
-                return text;
+        for (String s:entrada) {
+            //cabe en la línea
+            if (s.length() + contadorLetrasEscritas <= lineLength) {
+                if (contadorLetrasEscritas == 0) {
+                    salida += s;
+                }
+                else {
+                    salida += " " + s;
+                }
+
+                contadorLetrasEscritas += s.length();
+            }
+
+            //no cabe en la linea
             else {
-                for (int i = 0; i < entrada[0].length(); i++) {
-                    if (i == lineLength-1)
-                        salida = salida + "-\n" + entrada[0].charAt(i);
-                    else 
-                        salida = salida + entrada[0].charAt(i);
-                }
-                return salida;
-            }
-        }
-        else {
-            if (lineLength < 8) {
-                for (String s:entrada) {
-                    salida = salida+s+"\n";
-                }
-                salida = salida.substring(0, salida.length()-1);
-            }
-            else {
-                for (String s:entrada) {
-                    if (cont % 2 == 0) {
-                        salida = salida + s;
-                        cont++;
+                if (s.length() > lineLength) {
+                    int n = 1;
+                    int c = 0;
+                    for (int i = 0; i < s.length(); i++) {
+                        if ((i == (lineLength*n)-n) && (i != s.length()-1)) {
+                            salida += "-\n" + s.charAt(i);
+                            n++;
+                        }
+                        else if ((contadorLetrasEscritas + s.length() > lineLength) && (c == 0) &&
+                        (lineLength > 5)) {
+                            salida += "\n" + s.charAt(i);
+                            c++;
+                        }
+                        else {
+                            salida += s.charAt(i);
+                        }
                     }
-                    else {
-                        salida = salida + " " +s+"\n";
-                        cont++;
+                    contadorLetrasEscritas += s.length();
+                    if (contadorLetrasEscritas + s.length() > lineLength) {
+                        salida += "\n";
                     }
                 }
-                salida = salida.substring(0, salida.length()-1);
+                else {
+                    salida += "\n" + s;
+                    contadorLetrasEscritas = s.length();
+                }
+                if ((contadorPalabrasEscritas == entrada.length-1) && (lineLength < s.length()))
+                    salida = salida.substring(0, salida.length()-1);
             }
-            return salida;
+            contadorPalabrasEscritas++;
         }
-
-
-
-
-        
-        /*if (entrada.length == 2) {
-            return "test\ntest";
-        }
-        if (entrada.length > 2) {
-            return "test test\ntest test";
-        }
-        else {
-            if (lineLength == 2) {
-                return "";
-            }else {
-                return "test";
-            }
-        }*/
+        //salida = salida.replaceAll("\\s", ".");
+        //salida = salida.replaceAll("\n", "_");
+        return salida;
     }
     
 }
