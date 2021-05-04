@@ -6,27 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LineBreaker {
-
-    //CASOS
-
-    //#    //TEXTO                 LineLength      SALIDA
-
-    //1    //""                        2           ""
-    //2    //"test"                    4           "test"
-    //3    //"test"                    5           "test"
-    //4    //"test test"               4           "test\ntest"
-    //5    //"test test"               5           "test\ntest"
-    //6    //"test test"               6           "test\ntest"
-    //7    //"test test test test"     9           "test test\ntest test"
-    //8    //"test  test"              4           "test\ntest"
-    //9    //"test   test"             6           "test\ntest"
-    //10   //"testtest"                5           "test-\ntest"
-    //11   //"testtesttest"            5           "test-\ntest-\ntest"
-    //12   //"test test"               3           "te-\nst\nte-\nst"
-    //13   //"test 1234567 test"       6           "test\n12345-\n67\ntest"
-    //14   //"123456789"               3           "12-\n34-\n56-\n789"
-
-
+    
     public static String breakText(String text, int lineLength){  
         String salida= "";
         String[] entrada = text.split(" +");
@@ -46,42 +26,46 @@ public class LineBreaker {
                 contadorLetrasEscritas += s.length();
             }
 
-            //no cabe en la linea
+            //no cabe en la linea, escribimos la palabra letra a letra para poder controlar los saltos de linea y los guiones
             else {
                 if (s.length() > lineLength) {
-                    int n = 1;
-                    int c = 0;
+                    //usamos numeroSaltos para saber el numero de veces que ha saltado de linea
+                    int numeroSaltos = 1;
+                    int primera = 0; //Para que solo entre en el bucle una vez
                     for (int i = 0; i < s.length(); i++) {
-                        if ((i == (lineLength*n)-n) && (i != s.length()-1)) {
+                         // cuando la palabra esta a medias de escribirse y ya no entran mas letras en la linea
+                        if ((i == (lineLength*numeroSaltos)-numeroSaltos) && (i != s.length()-1)) {
                             salida += "-\n" + s.charAt(i);
-                            n++;
+                            numeroSaltos++;
+                            contadorLetrasEscritas++;
                         }
-                        else if ((contadorLetrasEscritas + s.length() > lineLength) && (c == 0) &&
+                        // cuando la palabra esta escrita y ya no entran mas letras en la linea
+                        else if ((contadorLetrasEscritas + s.length() > lineLength) && (primera == 0) && 
                         (lineLength > 5)) {
                             salida += "\n" + s.charAt(i);
-                            c++;
+                            primera++;
+                            contadorLetrasEscritas++;
                         }
-                        else {
+                        else { // Caso base para escribir las palabras letra a letra
                             salida += s.charAt(i);
+                            contadorLetrasEscritas++;
                         }
                     }
-                    contadorLetrasEscritas += s.length();
-                    if (contadorLetrasEscritas + s.length() > lineLength) {
+                    // para introducir saltos de linea despues de escribir una palabra si ya no entran mas letras en la linea
+                    if (contadorLetrasEscritas + s.length() > lineLength) { 
                         salida += "\n";
                     }
                 }
                 else {
-                    salida += "\n" + s;
+                    salida += "\n" + s; 
                     contadorLetrasEscritas = s.length();
                 }
+                 // para quitar el ultimo salto de linea que tiene la salida
                 if ((contadorPalabrasEscritas == entrada.length-1) && (lineLength < s.length()))
                     salida = salida.substring(0, salida.length()-1);
             }
             contadorPalabrasEscritas++;
         }
-        //salida = salida.replaceAll("\\s", ".");
-        //salida = salida.replaceAll("\n", "_");
         return salida;
-    }
-    
+    } 
 }
