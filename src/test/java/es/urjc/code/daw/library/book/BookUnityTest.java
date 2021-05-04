@@ -3,6 +3,7 @@ package es.urjc.code.daw.library.book;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import es.urjc.code.daw.library.notification.NotificationService;
 
@@ -26,15 +27,17 @@ class BookUnityTest {
 	void givenValidBook_whenIsSaved_thenIsSavedRepoAndNotify(){
 		
 		//Given
-		Book book1 = mock(Book.class);
-		when(repo.save(book1)).thenReturn(book1);
+		Book book = mock(Book.class);
+		when(repo.save(book)).thenReturn(book);
+		when(book.getTitle()).thenReturn("Virtual Hero");
+		when(book.getDescription()).thenReturn("Rubius");
 		
 		//When
-		this.service.save(book1);
+		this.service.save(book);
 		
 		//Then
-		verify(repo).save(book1);
-		verify(notifications).notify("Book Event: book with title="+book1.getTitle()+" was created");
+		verify(repo).save(book);
+		verify(notifications).notify("Book Event: book with title="+book.getTitle()+" was created");
 
 	}
 	
@@ -45,6 +48,7 @@ class BookUnityTest {
 		//Given
 		Book book2 = mock(Book.class);
 		when(book2.getId()).thenReturn((long) 02);
+		when(book2.getDescription()).thenReturn("Description");
 		when(repo.save(book2)).thenReturn(book2);
 		this.service.save(book2);
 		
