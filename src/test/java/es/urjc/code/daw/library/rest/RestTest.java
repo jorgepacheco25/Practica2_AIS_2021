@@ -32,11 +32,7 @@ class RestTest {
         
     	Response response = given().
         request()
-            .body("{ \"title\" : \"Virtual Hero\", \"description\": \"El personaje más carismático de la red, "
-            		+ "el youtuber con más seguidores del panorama trolero actual, "
-            		+ "protagoniza este cómic inspirado en los videojuegos, "
-            		+ "que llevará a sus seguidores a explorar mundos diversos, "
-            		+ "a combatir contra criaturas hostiles o a superar pruebas imposibles\" }")
+            .body("{ \"title\" : \"Virtual Hero\", \"description\": \"elRubius\" }")
             .contentType(ContentType.JSON).
 	    when().
 	         post("/api/books/").
@@ -51,11 +47,7 @@ class RestTest {
 				.body(
 					"id", equalTo(id),
 					"title", equalTo("Virtual Hero"),
-					"description", equalTo("El personaje más carismático de la red, "
-							+ "el youtuber con más seguidores del panorama trolero actual, "
-							+ "protagoniza este cómic inspirado en los videojuegos, "
-							+ "que llevará a sus seguidores a explorar mundos diversos, "
-							+ "a combatir contra criaturas hostiles o a superar pruebas imposibles"));
+					"description", equalTo("elRubius"));
 
     }
     
